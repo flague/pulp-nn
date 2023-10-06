@@ -66,7 +66,7 @@ void pulp_nn_linear(
 
     uint8_t *pA = pInBuffer;
     int8_t *pB = pWeights + (i * dim_vec);
-
+    __asm__ __volatile__ ("csrs 0x7D0, %0" ::  "r" (6) ); //to try
     for (int j=0; j<(dim_vec >> 2); j++)
     {
       vecA = *((v4u*)pA);
@@ -106,6 +106,6 @@ void pulp_nn_linear(
       }
     }
   }
-  
+  __asm__ __volatile__ ("csrc 0x7D0, %0" ::  "r" (6) );
   pi_cl_team_barrier(0);
 }

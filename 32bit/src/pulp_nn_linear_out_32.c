@@ -44,7 +44,7 @@ void pulp_nn_linear_out_32(
   v4s vecB;
 
   int32_t *pOut = (int32_t *) pOutBuffer + start;
-
+  __asm__ __volatile__ ("csrs 0x7D0, %0" ::  "r" (6) );
   for(int i=start; i<stop; i++)
   {
     int sum = 0;
@@ -78,5 +78,6 @@ void pulp_nn_linear_out_32(
     *pOut = sum;
     pOut++;
   }
+  __asm__ __volatile__ ("csrc 0x7D0, %0" ::  "r" (6) );
   pi_cl_team_barrier(0);
 }

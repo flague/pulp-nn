@@ -162,6 +162,7 @@ void __attribute__ ((noinline)) pulp_nn_conv_Ho_parallel(
           }
         }
       }
+      __asm__ __volatile__ ("csrs 0x7D0, %0" ::  "r" (6) );  // CHECK, for now, always perform mac and dot approximate, eventually with approx 0
       if (pIm2Col == pIm2ColBase + 2 * ch_in * dim_kernel_x * dim_kernel_y)
       {
         pOut = pulp_nn_matmul(
@@ -245,5 +246,7 @@ void __attribute__ ((noinline)) pulp_nn_conv_Ho_parallel(
       }
     }
   }
+  __asm__ __volatile__ ("csrc 0x7D0, %0" ::  "r" (6) );  // CHECK, for now, always perform mac and dot approximate, eventually with approx 0
+        
   pi_cl_team_barrier(0);
 }
